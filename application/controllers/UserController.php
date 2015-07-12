@@ -1,0 +1,53 @@
+<?php
+
+class UserController extends Zend_Controller_Action
+{
+
+    public function init()
+    {
+        /* Initialize action controller here */
+    }
+
+    public function indexAction()
+    {
+        // action body
+    }
+
+    public function addAction()
+    {
+		if($this->_request->isPost())
+		{
+        	$user_data=$this->_request->getParams();
+		$user=new Application_Model_User();
+		$user->addUser($user_data);
+		//$this->view->user_data=$user_data;
+		//$this->render();
+		}
+    }
+
+    public function editAction()
+    {
+        // action body
+    }
+
+    public function deleteAction()
+    {
+        // action body
+    }
+
+    public function listAction()
+    {
+        // action body
+    }
+
+
+}
+
+
+
+
+
+
+
+
+

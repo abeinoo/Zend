@@ -1,0 +1,19 @@
+<br /><br />
+<div id="view-content">
+	<p>View script for controller <b>Users</b> and script/action name <b>login</b></p>
+</div>
+<div id="view-content">
+     
+    <?php 
+    if(!empty($this->user_msg))
+    {
+    echo $this->user_msg;
+    }
+    else 
+    {
+        echo "<a href='add'>Add New User</a>";
+        echo "<a href='logout'>Logout</a>";
+        echo $this->form; 
+    }
+    ?>
+</div>

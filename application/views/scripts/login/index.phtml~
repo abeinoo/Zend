@@ -1,0 +1,16 @@
+<br /><br />
+<div id="view-content">
+	<form action="http://localhost/mysite/public/post/list/id/admin.php" method="post">
+	<lable for="username">User Name:</lable>
+	<input type="text" name="username"/>
+	<br />
+	<lable for="password">Password:</lable>
+	<input type="password" name="password"/>
+	<br />
+	<input type="checkbox" name="keeplogin">
+	Keep me login.
+	</input>
+	<br />
+	<input type="submit" name="login" value="Login"/>
+	</form>
+</div>

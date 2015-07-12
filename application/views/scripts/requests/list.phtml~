@@ -1,0 +1,27 @@
+<div id="view-content">
+	<p>View script for controller <b>Requests</b> and script/action name <b>list</b></p>
+         <?php
+         if($this->identity->user_type=="admin")
+		{
+			echo "<a href='list'></a>";
+		}
+        for($i=0;$i<count($this->requests);$i++)
+        {
+            echo "<div>"."User Name"."<span>".$this->requests[$i]['rdate']."</span></div>";
+           // echo "<textarea disabled rows=10 cols=20>".$this->comments[$i]['body']."</textarea>";
+            $body = new Zend_Form_Element_Textarea('body'); 
+            $body->setLabel("Requests:");
+            $body->setRequired();
+            $body->setValue($this->requests[$i]['body']);
+            $body->setAttrib("rows", "10");
+            $body->setAttrib("disabled",true);
+            echo $body;
+            
+        }
+        
+        
+        
+        ?>
+               
+        <?php echo $this->course_request_form; echo $this->material_request_form;?>
+</div>

@@ -1,0 +1,26 @@
+<p>Add User</p>
+<div id="view-content">
+<form method="post" >
+Full Name:<input name="fullname" type="text" 
+value="<?php
+if(isset($this->user_data))
+{
+echo $this->user_data['fullname'];
+}
+?>"/>
+<br/>
+username:<input name="username" type="text" 
+value="<?php
+if(isset($this->user_data))
+{
+echo $this->user_data['username'];
+}
+?>"/>
+<br/>
+password:<input name="password" type="password"/><br/>
+<br/>
+<input name="submitbtn" type="submit" value="Add user"/>
+<input name="resetbtn" type="reset"/>
+<div name="error"></div>
+</form>
+</div>

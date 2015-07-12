@@ -1,0 +1,53 @@
+<div id="view-content">
+	<!-- <p>View script for controller <b>Requests</b> and script/action name <b>list</b></p> -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header color-horg">Requests
+                    <small>all Request</small>
+                </h1>
+                     <ol class="breadcrumb alert alert-info alert-warning">
+                           <li class="active ">
+                           <i class="fa fa-fw fa-edit"></i> Request
+                         </li>
+                    </ol>
+            </div>
+        </div>
+        <div class="row">
+         
+
+                <?php
+        for($i=0;$i<count($this->requests);$i++)
+        {    ?>         
+                 <div class="col-lg-12">
+                 <br/>
+                <div class="panel panel-warning">
+                <div class="panel-heading">
+                <?php
+
+              echo "User Name"."<h5 class=\"panel-title\">".$this->requests[$i]['rdate']."</h5>";
+             echo "</div>";
+           // echo "<textarea disabled rows=10 cols=20>".$this->comments[$i]['body']."</textarea>";
+            $body = new Zend_Form_Element_Textarea('body'); 
+            $body->setLabel("Requests:");
+            $body->setRequired();
+            $body->setValue($this->requests[$i]['body']);
+            $body->setAttrib("rows", "5");
+            $body->setAttrib("disabled",true);
+            echo "<div class=\"panel-body\">";
+            echo $body->getValue();
+             echo "</div>";
+            echo "</div>";  
+            echo "</div>";  
+        }
+        
+        
+        
+        ?>
+                <div  role="form" class="col-lg-12">
+             <div class="form-group has-warning">
+               
+        <?php echo $this->course_request_form; echo $this->material_request_form;?>
+        </div>
+        </div>
+        </div>
+</div>

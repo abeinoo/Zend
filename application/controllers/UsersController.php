@@ -1,0 +1,237 @@
+<?php
+
+class UsersController extends Zend_Controller_Action
+{
+
+    public function init()
+    {
+        /* Initialize action controller here */
+        $authorization =Zend_Auth::getInstance();
+            $identity=$authorization->getIdentity();
+             $this->view->identity=$identity;
+
+
+    }
+
+    public function indexAction()
+    {
+        $this->redirect("users/login");
+    }
+
+    public function addAction()
+    {
+        
+	//$this->view->page_title = "Add";
+        $authorization =Zend_Auth::getInstance();
+        $identity=$authorization->getIdentity();
+        if($identity->user_type=="admin")
+            {
+                $form = new Application_Form_Registeration(); 
+                if($this->getRequest()->isPost())
+                    {
+                    if($form->isValid($_POST))
+                        {
+                            $model = new Application_Model_Users();
+                            $this->view->success = $model->addUser($form->getValues());
+                            $form->reset();
+                            $this->redirect("categories/list");
+                        }
+                    }		    
+                $this->view->form=$form;
+            }
+            else 
+            {
+                $form = new Application_Form_Registeration();
+                if($this->getRequest()->isPost())
+                {
+                    if($form->isValid($_POST))
+                    {
+                        $model = new Application_Model_Users();
+                        $this->view->success = $model->addUser($form->getValues());
+                        $form->reset();
+                        $this->redirect("categories/list");
+                    }
+                }
+                $this->view->form=$form;
+            }  
+    }
+
+    public function loginAction()
+    {
+
+        $this->_helper->layout->disablelayout();
+                $authorization =Zend_Auth::getInstance();
+            $identity=$authorization->getIdentity();
+        if($authorization->hasIdentity()) 
+        {
+            $this->redirect("categories/list");
+        }
+        if($this->getRequest()->isPost())
+            {
+                $data = $this->getRequest()->getParams();
+                $db = Zend_Db_Table::getDefaultAdapter();
+                $authAdapter = new Zend_Auth_Adapter_DbTable($db,'users','username','password');
+                $authAdapter->setIdentity($data['username']);
+                $authAdapter->setCredential(md5($data['password']));
+                $result = $authAdapter->authenticate();
+                if ($result->isValid()) 
+                { 
+
+                    $active=(new Application_Model_Users())->getUserByUsername($data['username'])[0]['active'];
+                    if($active)
+                        {
+                         $auth = Zend_Auth::getInstance();
+                         $storage = $auth->getStorage();
+                         $storage->write($authAdapter->getResultRowObject(
+                         array('f_name','username','id', 'user_type')));
+                			$authorization =Zend_Auth::getInstance();
+                			$identity=$authorization->getIdentity();
+                			 $this->view->identity=$identity;
+                         $this->redirect('categories/list');           
+
+                        }
+                    else 
+                    {
+                        $this->view->user_msg="The page not allowed for normal user.";
+                        $this->redirect("users/login");
+                    }        
+
+
+                }
+
+            }
+
+
+        $form=new Application_Form_Login();
+        $this->view->form=$form;
+         
+    }
+
+    public function editAction()
+    {
+        $authorization =Zend_Auth::getInstance();
+        $identity=$authorization->getIdentity();
+        if($identity)
+        {
+            $form=new Application_Form_Profile();
+            $model = new Application_Model_Users();
+            $id = $this->getRequest()->getParam('id');
+            $user_data = $model->getUserById($id);
+            $form->populate($user_data);
+//            $form->getElement('password')->setValue($user_data[0]['password']);
+//            $form->getElement('re_password')->setValue($user_data[0]['password']);
+            if($identity->user_type=="admin")
+            {
+           
+                if($this->getRequest()->isPost())
+                    {
+
+                        $form->getElement('id')->setValue($id);
+                        if($form->isValid($this->getRequest()->getParams()))
+                            {
+                                $model = new Application_Model_Users();
+                                $form->removeElement("re_password");
+                                $model->editUser($form->getValues(),$id);//$this->view->identity->id
+                                $this->redirect("/users/list");
+                            }
+                    }
+            }
+            else
+            {
+              $form->removeElement("user_type");  
+              $form->removeElement("active");  
+              if($this->getRequest()->isPost())
+                    {
+                        $form->getElement('id')->setValue($id);
+                        if($form->isValid($this->getRequest()->getParams()))
+                            {
+                                $model = new Application_Model_Users();
+                                $form->removeElement("re_password");
+                                $model->editUser($form->getValues(),$id);//$this->view->identity->id
+                                $this->redirect("categories/list");
+                            }
+                    }
+            }
+            $this->view->form = $form;
+            //$this->render("add");
+        }
+        else
+        {
+            $this->redirect("/users/login");
+        }
+
+        
+    }
+    
+   public function deleteAction()
+    {
+         $authorization =Zend_Auth::getInstance();
+        $identity=$authorization->getIdentity();
+        if($identity->user_type=="admin")
+        {
+            $id=$this->getRequest()->getParam('id');
+            if($id)
+            {
+                $model = new Application_Model_Users();
+                $model->deleteUser($id);
+            }
+            $this->redirect("users/list");
+        }
+        else
+        {
+            $this->view->user_msg="The page not allowed for normal user.";
+            $this->_redirect("/users/login");
+        }
+    }
+    
+    public function logoutAction()
+    {
+        $authorization =Zend_Auth::getInstance();
+        $identity=$authorization->getIdentity();
+            if($identity)
+            {
+                $authAdapter = Zend_Auth::getInstance();
+                $authAdapter->clearIdentity();
+            }
+        $this->redirect("users/login");
+    }
+    
+    public function listAction()
+    {
+       $authorization =Zend_Auth::getInstance();
+        $identity=$authorization->getIdentity();
+        if($identity->user_type=="admin")
+            {
+                $user_model = new Application_Model_Users();
+                $users = $user_model->listUsers();
+                    //$page=$this->_getParam('page',1);
+                    //$paginator = Zend_Paginator::factory($courses);
+                    // $paginator->setItemCountPerPage(10);
+                    //$paginator->setCurrentPageNumber($page);
+
+                    $this->view->users=$users;
+
+                
+            }
+        else 
+        { 
+            $this->view->user_msg="The page not allowed for normal user.";
+            $this->_redirect("/users/login");
+             
+            
+        }    
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+

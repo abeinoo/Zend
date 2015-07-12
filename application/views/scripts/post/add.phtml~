@@ -1,0 +1,43 @@
+<br /><br />
+<div id="view-content">
+<?php
+
+$post='<form method="post">
+	Title:<input name="title" type="text" />
+<br/>
+Body:<textarea name="postbody">
+</textarea>
+<br/>
+<input name="addpost" type="submit" value="Add post"/>
+</form>';
+//var_dump($this->post_data);
+if(!isset($this->post_data['addpost']) && !isset($this->post_data['addcomment']))
+echo $post;
+?>
+<?php
+//echo $this->post_data['addcomment'];
+if(isset($this->post_data['addcomment']))
+{
+echo "hyutu";
+echo "Title:".$this->post_data['title']."<br/>";
+echo "Post:".$this->post_data['postbody']."<br/>";
+echo "Title:".$this->post_data['mail']."<br/>";
+echo "Post:".$this->post_data['commentbody']."<br/>";
+$comment= "<form method='post'>Mail:<input name='mail' type='text'/>"."<br/>"."Body:<textarea name='commentbody'></textarea>"."<br/>"."<input name='addcomment' type='submit' value='Addcomment'/><input name='title' type='hidden' value='".$this->post_data['title']."'/><input name='postbody' type='hidden' value='".$this->post_data['postbody']."'/><input name='post_id' type='hidden' value='".$this->post_id."'/></form>"; 
+
+echo $comment;
+}
+else
+{
+if(isset($this->post_data['addpost']))
+{
+echo "Title:".$this->post_data['title']."<br/>";
+echo "Post:".$this->post_data['postbody']."<br/>";
+
+$comment= "<form method='post'>Mail:<input name='mail' type='text'/>"."<br/>"."Body:<textarea name='commentbody'></textarea>"."<br/>"."<input name='addcomment' type='submit' value='Addcomment'/><input name='title' type='hidden' value='".$this->post_data['title']."'/><input name='postbody' type='hidden' value='".$this->post_data['postbody']."'/><input name='post_id' type='hidden' value='".$this->post_id."'/></form>"; 
+
+echo $comment;
+}
+}
+?>
+</div>

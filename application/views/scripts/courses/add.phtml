@@ -1,0 +1,27 @@
+
+<div id="view-content" class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header color-horg">
+                            Course <small>Courses Overview</small>
+                        </h1>
+                        <ol class="breadcrumb alert alert-info alert-warning">
+                            <li class="active ">
+                                <i class="fa fa-dashboard"></i> Course
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+<div id="view-content">
+	<?php if($this->notallowed) echo $this->notallowed;
+ 
+              else ?>
+
+              <div  role="form" class="col-lg-12">
+	         <div class="form-group has-warning">
+        <?php echo $this->form; ?>
+       </div>
+   </div>
+</div>
+</div>
+</div>

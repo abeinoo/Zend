@@ -1,0 +1,27 @@
+<br /><br />
+<div id="view-content">
+	<p>View script for controller <b>Courses</b> and script/action name <b>list</b></p>
+</div>
+<div>
+        <table>
+            <tr>
+                <th>Course Name </th>
+                <th>Course Hours </th>
+                <th>Course Category </th>
+                <th>Edit Course </th>
+                <th>Delete Course </th>
+            </tr>
+            <?php
+            for ($i=0;$i<count($this->courses); $i++) {
+            
+            echo "<tr>";
+            echo "<td>".$this->courses[$i]['name']."</td>";
+            echo "<td>".$this->courses[$i]['hours']."</td>";
+            echo "<td><a href='edit/id/".$this->courses[$i]['id']."'>Edit</a><a href='delete/id/".$this->courses[$i]['id']."'> Delete</a></td>";
+            
+            echo "</tr>";
+       
+            
+             ?>
+        </table>
+</div>
